@@ -75,7 +75,7 @@ export default {
   data() {
     return {
       novaViagem: {
-        id: 1,
+        id: parseInt(Math.random() * 100),
         name: "",
         price_confort: "",
         price_econ: "",
@@ -94,7 +94,6 @@ export default {
           Array(this.novaViagem)
         );
         alert("Viagem adicionada com sucesso!");
-        // Limpar o formulário após a adição da viagem
         this.novaViagem = {
           name: "",
           price_confort: "",
@@ -119,25 +118,20 @@ export default {
     formatarPreco(inputValue) {
       let numericValue = inputValue.replace(/[^\d,.]/g, "");
       numericValue = numericValue.replace(",", ".");
-      const hadDot = numericValue.includes(",");
+      const hadDot = numericValue.includes(".");
 
       if (!numericValue.startsWith("R$ ")) numericValue = "R$ " + numericValue;
-
       if (hadDot) {
-        let decimal = 0;
+        let decimal = "";
         try {
-          decimal = numericValue.slice(
-            numericValue.search(".") + 1,
-            numericValue.search(".") + 3
-          );
+          decimal = numericValue.slice(numericValue.search(/\./g) + 1);
         } catch {
-          decimal = numericValue.slice(numericValue.search(".") + 1);
+          decimal = numericValue.slice(numericValue.search(/\./g) + 1);
         }
-        alert(decimal);
         decimal = decimal.replace(".", "");
         numericValue =
-          numericValue.slice(0, numericValue.search(".") + 1) + decimal;
-        numericValue = numericValue.slice(0, numericValue.search(".") + 3);
+          numericValue.slice(0, numericValue.search(/\./g) + 1) + decimal;
+        numericValue = numericValue.slice(0, numericValue.search(/\./g) + 3);
       }
 
       if (numericValue.length > 15) {
@@ -159,7 +153,7 @@ export default {
         if (inputValue.startsWith("R$ ")) inputValue += ".00";
         else inputValue = "R$ 0.00";
       } else {
-        while (inputValue.search(".") + 3 > inputValue.length) {
+        while (inputValue.search(/\./g) + 3 > inputValue.length) {
           inputValue += "0";
         }
       }
@@ -168,46 +162,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
-.container {
-  font-family: Arial, sans-serif;
-  margin: 0 auto;
-  padding: 20px;
-  max-width: 600px;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-label {
-  font-weight: bold;
-}
-
-input[type="text"] {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 50%;
-}
-
-button[type="submit"] {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-button[type="submit"]:hover {
-  background-color: #0056b3;
-}
+@import "./style_add.css";
 </style>

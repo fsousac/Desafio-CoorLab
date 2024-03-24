@@ -16,12 +16,12 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data() {
     return {
-      viagens: []
+      viagens: [],
     };
   },
   created() {
@@ -30,16 +30,14 @@ export default {
   methods: {
     async listarViagens() {
       try {
-        const response = await axios.get('http://localhost:3000/viagens/');
-        this.viagens = response.data;
+        const response = await axios.get("http://localhost:3000/viagens/");
+        this.viagens = response.data["transport"];
       } catch (error) {
-        console.error('Erro ao listar viagens:', error);
+        console.error("Erro ao listar viagens:", error);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style scoped>
-/* Estilos específicos do componente */
-</style>
+<style scoped></style>

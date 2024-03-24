@@ -1,32 +1,33 @@
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+import os
 import json
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework import generics
-from .models import Trip
-from .serializers import TripSerializer
 
 
-class ListTrip(generics.ListAPIView):
-    queryset = Trip.objects.all()
-    serializer_class = TripSerializer
+class ListTrip(APIView):
+    def get(self, request):
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        data_json_path = os.path.join(current_dir, '../../data.json')
+        with open(data_json_path, 'r') as file:
+            data = json.load(file)
+        return Response(data)
 
 
-class SaveTrip(generics.CreateAPIView):
-    queryset = Trip.objects.all()
-    serializer_class = TripSerializer
+class SaveTrip(APIView):
+    def post(self, request):
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        data_json_path = os.path.join(current_dir, '../../data.json')
+        if os.path.exists(data_json_path):
+            with open(data_json_path, 'r') as file:
+                existing_data = json.load(file)
+        else:
+            existing_data = []
 
-    def create(self, request, *args, **kwargs):
-        dados_brutos = request.body
+        new_data = request.data
+        for k in new_data:
+            existing_data['transport'].append(k)
+        with open(data_json_path, 'w') as file:
+            json.dump(existing_data, file)
 
-        try:
-            dados_json = json.loads(dados_brutos)
-
-            for k in range(len(dados_json)):
-                serializer = self.get_serializer(data=dados_json[k])
-                serializer.is_valid(raise_exception=True)
-                self.perform_create(serializer)
-
-            return JsonResponse({'mensagem': 'Dados salvos com sucesso.'})
-
-        except json.JSONDecodeError:
-            return JsonResponse({'erro': 'Erro ao analisar o JSON.'}, status=400)
+        return Response(new_data, status=status.HTTP_201_CREATED)
