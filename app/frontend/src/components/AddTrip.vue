@@ -13,7 +13,10 @@
           id="precoConforto"
           v-model="novaViagem.price_confort"
           required
-          @blur="formatarPreco($event.target.value)"
+          @input="novaViagem.price_confort = formatarPreco($event.target.value)"
+          @blur="
+            novaViagem.price_confort = adicionaCentavos($event.target.value)
+          "
         />
       </div>
       <div>
@@ -23,7 +26,8 @@
           id="precoEconomico"
           v-model="novaViagem.price_econ"
           required
-          @blur="formatarPreco($event.target.value)"
+          @input="novaViagem.price_econ = formatarPreco($event.target.value)"
+          @blur="novaViagem.price_econ = adicionaCentavos($event.target.value)"
         />
       </div>
       <div>
@@ -41,11 +45,23 @@
       </div>
       <div>
         <label for="poltrona">Poltrona:</label>
-        <input type="text" id="poltrona" v-model="novaViagem.seat" />
+        <input
+          type="text"
+          id="poltrona"
+          v-model="novaViagem.seat"
+          @input="novaViagem.seat = formatarAssento($event.target.value)"
+          required
+        />
       </div>
       <div>
         <label for="leito">Leito:</label>
-        <input type="text" id="leito" v-model="novaViagem.bed" />
+        <input
+          type="text"
+          id="leito"
+          v-model="novaViagem.bed"
+          @input="novaViagem.bed = formatarAssento($event.target.value)"
+          required
+        />
       </div>
       <button type="submit">Adicionar Viagem</button>
     </form>
@@ -95,52 +111,51 @@ export default {
         );
       }
     },
+    formatarAssento(inputValue) {
+      inputValue = inputValue.toUpperCase();
+      inputValue = inputValue.slice(0, 3);
+      return inputValue;
+    },
     formatarPreco(inputValue) {
       // Remove todas as vírgulas
-      numericValue = inputValue.replace(/[^\d,.]/g, "");
+      let numericValue = inputValue.replace(/[^\d,.]/g, "");
       numericValue = numericValue.replace(/\./g, ",");
       const hasComma = numericValue.includes(",");
 
-      if (!hasComma) {
-        numericValue += ",00";
+      if (!numericValue.startsWith("R$ ")) numericValue = "R$ " + numericValue;
+
+      if (hasComma) {
+        let test = numericValue.slice(
+          numericValue.search(",") + 1,
+          numericValue.length
+        );
+        test = test.replace(",", "");
+        numericValue =
+          numericValue.slice(0, numericValue.search(",") + 1) + test;
+        numericValue = numericValue.slice(0, numericValue.search(",") + 3);
       }
 
       if (numericValue.length > 15) {
         numericValue = numericValue.slice(0, 15);
       }
 
-      // Adiciona o prefixo "R$ "
-      if (!precoFormatado.startsWith("R$ "))
-        precoFormatado = "R$ " + precoFormatado;
+      inputValue = numericValue;
+      return inputValue;
+    },
+    adicionaCentavos(inputValue) {
+      const hasComma = inputValue.includes(",");
 
-      this.novaViagem.price_confort = precoFormatado;
-
-      precoFormatado = this.novaViagem.price_econ.replace(/\./g, ",");
-
-      // Limita o tamanho do campo para 15 caracteres (incluindo "R$ ")
-      if (precoFormatado.length > 14) {
-        precoFormatado = precoFormatado.slice(0, 14);
-      }
-
-      // Adiciona o prefixo "R$ "
-      if (!precoFormatado.startsWith("R$ ")) {
-        precoFormatado = "";
-        precoFormatado = "R$ " + precoFormatado;
-      }
-      if (precoFormatado.includes(",")) {
-        if (precoFormatado.length > precoFormatado.search(",") + 3) {
-          precoFormatado = precoFormatado.slice(
-            0,
-            precoFormatado.search(",") + 3
-          );
+      if (!hasComma) {
+        inputValue += ",00";
+      } else {
+        while (inputValue.search(",") + 3 > inputValue.length) {
+          inputValue += "0";
         }
       }
-      this.novaViagem.price_econ = precoFormatado;
+      return inputValue;
     },
   },
 };
 </script>
 
-<style scoped>
-/* Estilos específicos do componente */
-</style>
+<style scoped></style>
