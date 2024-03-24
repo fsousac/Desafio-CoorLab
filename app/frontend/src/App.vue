@@ -23,8 +23,6 @@
 
 <script>
 import router from "./router/index";
-// import AddTrip from "./components/AddTrip.vue";
-// import ListTrip from "./components/ListTrip.vue";
 import { createApp } from "vue";
 
 export default {
@@ -33,10 +31,6 @@ export default {
     const app = createApp({});
     app.use(router);
     return {};
-  },
-  components: {
-    // AddTrip,
-    // ListTrip,
   },
 };
 </script>

@@ -22,15 +22,18 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
 }
 
-.barra-lateral .icone {
+router-link {
+  width: fit-content;
+  height: fit-content;
+}
+
+.icone {
   background-color: transparent;
-  width: 100px;
-  height: 100px;
-  margin-top: 20vh;
-  margin-bottom: 20vh;
+  width: 6vw;
+  height: 12vh;
   padding: 10%;
   display: flex;
   align-items: center;

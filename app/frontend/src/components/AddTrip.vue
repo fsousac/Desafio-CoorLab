@@ -117,22 +117,27 @@ export default {
       return inputValue;
     },
     formatarPreco(inputValue) {
-      // Remove todas as vírgulas
       let numericValue = inputValue.replace(/[^\d,.]/g, "");
-      numericValue = numericValue.replace(/\./g, ",");
-      const hasComma = numericValue.includes(",");
+      numericValue = numericValue.replace(",", ".");
+      const hadDot = numericValue.includes(",");
 
       if (!numericValue.startsWith("R$ ")) numericValue = "R$ " + numericValue;
 
-      if (hasComma) {
-        let test = numericValue.slice(
-          numericValue.search(",") + 1,
-          numericValue.length
-        );
-        test = test.replace(",", "");
+      if (hadDot) {
+        let decimal = 0;
+        try {
+          decimal = numericValue.slice(
+            numericValue.search(".") + 1,
+            numericValue.search(".") + 3
+          );
+        } catch {
+          decimal = numericValue.slice(numericValue.search(".") + 1);
+        }
+        alert(decimal);
+        decimal = decimal.replace(".", "");
         numericValue =
-          numericValue.slice(0, numericValue.search(",") + 1) + test;
-        numericValue = numericValue.slice(0, numericValue.search(",") + 3);
+          numericValue.slice(0, numericValue.search(".") + 1) + decimal;
+        numericValue = numericValue.slice(0, numericValue.search(".") + 3);
       }
 
       if (numericValue.length > 15) {
@@ -143,12 +148,18 @@ export default {
       return inputValue;
     },
     adicionaCentavos(inputValue) {
-      const hasComma = inputValue.includes(",");
+      const hadDot = inputValue.includes(".");
 
-      if (!hasComma) {
-        inputValue += ",00";
+      for (let i = 3; i <= i; i++) {
+        if (!inputValue.slice(i).startsWith("0")) break;
+        inputValue = inputValue.slice(0, i) + inputValue.slice(i + 1);
+      }
+
+      if (!hadDot) {
+        if (inputValue.startsWith("R$ ")) inputValue += ".00";
+        else inputValue = "R$ 0.00";
       } else {
-        while (inputValue.search(",") + 3 > inputValue.length) {
+        while (inputValue.search(".") + 3 > inputValue.length) {
           inputValue += "0";
         }
       }
@@ -158,4 +169,45 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.container {
+  font-family: Arial, sans-serif;
+  margin: 0 auto;
+  padding: 20px;
+  max-width: 600px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  font-weight: bold;
+}
+
+input[type="text"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 50%;
+}
+
+button[type="submit"] {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+</style>

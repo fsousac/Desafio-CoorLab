@@ -8,8 +8,8 @@ class Trip(models.Model):
     price_econ = models.CharField(max_length=15)
     city = models.CharField(max_length=100)
     duration = models.CharField(max_length=3)
-    seat = models.CharField(max_length=4, null=True)
-    bed = models.CharField(max_length=4, null=True)
+    seat = models.CharField(max_length=3, null=True)
+    bed = models.CharField(max_length=3, null=True)
 
     class Meta:
         app_label = 'api'
