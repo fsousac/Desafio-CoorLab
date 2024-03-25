@@ -20,6 +20,20 @@ Durante o desenvolvimento do projeto, algumas dificuldades foram encontradas:
 
 - **Gerenciamento de Requisições**: Lidar com as solicitações HTTP no back-end, especialmente ao processar dados enviados pelo cliente, exigiu um cuidadoso gerenciamento para garantir a segurança e a integridade dos dados.
 
+## Dependências Utilizadas
+
+### Front-end
+
+- [Vue.js](https://vuejs.org/guide/quick-start.html): Framework JavaScript para construção de interfaces de usuário.
+- [Vue Router](https://router.vuejs.org/installation): Biblioteca para gerenciamento de rotas no Vue.js.
+- [Axios](https://www.npmjs.com/package/vue-axios): Cliente HTTP para fazer requisições AJAX.
+
+### Back-end
+
+- [Django](https://www.djangoproject.com/download/): Framework web em Python para desenvolvimento rápido e limpo.
+- [Django REST Framework](https://www.django-rest-framework.org/#installation): Biblioteca para construção de APIs RESTful com Django.
+- [Python](https://www.python.org/downloads/): Linguagem de programação utilizada para escrever o back-end.
+
 ## Executando o Projeto
 
 Para executar o projeto, siga as instruções abaixo:
